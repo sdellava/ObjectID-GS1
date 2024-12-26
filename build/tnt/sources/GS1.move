@@ -3,7 +3,7 @@
 
 #[allow(lint(custom_state_change, self_transfer))]
 
-module 0x0::TnT {
+module 0x0::GS1 {
 
     use std::string::{String}; 
     //use std::transfer;
