@@ -71,6 +71,7 @@ public fun new_gs1_object(
 
     // Transfer the GS1 object to the sender
     transfer::transfer(gs1_object, tx_context::sender(ctx));
+
 }
 
 

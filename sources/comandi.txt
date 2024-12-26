@@ -1,26 +1,60 @@
-iota client call --package 0xd71e00aa0820ddc4159f4dc32f0b50e037589191b31bcc50198d4fabdc491794 --module TnT --function new_gs1_object --args 0xededd6ef556ebf36d4395a0f77ded1f43757caeef5310dddf03ea1e96d556222 "123456789012" "SN123456789" "Sample Product Description" "LOT2025" "2025-12-31T23:59:59Z" "DID:IOTA:PRODUCER001" "DID:IOTA:PRODUCT001" --gas 0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23 --gas-budget 10000000
+build: iota move build
+publish: iota client publish --dry-run
 
+Package:        0x08661a7951647a569357296893433f5e2b4f011a7bd776713cc1a7338aa9b973
+upgrade cap:    0x3794f859f1b0b93dc4b3d90b9a6c4d06afccd6a222c418e01cfa62d0ed011add 
+Registry id:    0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23
+
+
+new package:    0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea 
+
+Creazione oggetto:
 
 iota client call \
-    --package 0x749f80337dc7fede5ea1d0d9011a0619ed5eedec3edb5a0413d28db886abb86e \
+    --package 0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea \
     --module TnT \
-    --function transfer_gs1_object \
+    --function new_gs1_object \
     --args \
-        0x29870e80e5f248e384e60641605bef56f975c6602e40f16e6613bad388c6cea8 \
-        0x13f11b0548895a8514324f9f3c07c8f50725491f30c39d374ee7952a74cf9585 \
+        0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23 \
+        "123456789014" \
+        "SN123456791" \
+        "Sample Product Description" \
+        "LOT2025" \
+        "2025-12-20T10:01:59Z" \
+        "DID:IOTA:PRODUCER001" \
+        "DID:IOTA:PRODUCT003" \
     --gas 0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23 \
     --gas-budget 10000000
 
 
+Query Registry:
+
+iota client object 0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23
+
+
+
+iota client new-address ed25519
+Keys saved as Bech32.
+╭──────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Created new keypair and saved it to keystore.                                                │
+├────────────────┬─────────────────────────────────────────────────────────────────────────────┤
+│ alias          │ confident-spodumene                                                         │
+│ address        │ 0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9          │
+│ keyScheme      │ ed25519                                                                     │
+│ recoveryPhrase │ winner arrive intact seminar design verify matter brain rich tilt guide hat │
+╰────────────────┴─────────────────────────────────────────────────────────────────────────────╯
+
+Trasferimento oggetto:
+
+
 iota client call \
-    --package 0x749f80337dc7fede5ea1d0d9011a0619ed5eedec3edb5a0413d28db886abb86e \
+    --package 0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea \
     --module TnT \
     --function transfer_gs1_object \
-    --args \
-        0x801c22be37129ea4ac4bea5465fd29e3b6b60ffd85650b3ac1cf52141723968d \
-        0x13f11b0548895a8514324f9f3c07c8f50725491f30c39d374ee7952a74cf9585 \
+    --args 0x203d5fd39c57996c7bfa5b4ebd8b39acbefabff8b92d869605b796c07c593636 0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9 \
     --gas 0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23 \
     --gas-budget 10000000
+
 
 
 

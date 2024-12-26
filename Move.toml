@@ -19,7 +19,8 @@ Iota = { git = "https://github.com/iotaledger/iota.git", subdir = "crates/iota-f
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-tnt = "0x0"
+# tnt = "0x08661a7951647a569357296893433f5e2b4f011a7bd776713cc1a7338aa9b973"
+tnt = "0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
