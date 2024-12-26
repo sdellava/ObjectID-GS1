@@ -1,36 +1,36 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-Package:        0x08661a7951647a569357296893433f5e2b4f011a7bd776713cc1a7338aa9b973
-upgrade cap:    0x3794f859f1b0b93dc4b3d90b9a6c4d06afccd6a222c418e01cfa62d0ed011add 
-Registry id:    0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23
+export PACKAGE_ID=0x17b0b4ce0ce71b2b0a5cf3cb3f0392c496f952241074953eda8c529e1f1d93d0
+export UPGRADE_CAP=0xda39072560241cce61c9338b6f55e95508efce943a1588457b30d97e9eccfdb9 
+export REGISTY_ID=0xea625b15acab636282e3f01ee3984853ec026211e6eb0fd1c7efeec5f7bbd8d6
+export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
-
-new package:    0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea 
+export
 
 Creazione oggetto:
 
 iota client call \
-    --package 0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea \
-    --module TnT \
+    --package $PACKAGE_ID \
+    --module GS1 \
     --function new_gs1_object \
     --args \
-        0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23 \
+        $REGISTY_ID \
         "123456789014" \
         "SN123456791" \
         "Sample Product Description" \
         "LOT2025" \
         "2025-12-20T10:01:59Z" \
         "DID:IOTA:PRODUCER001" \
-        "DID:IOTA:PRODUCT003" \
-    --gas 0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23 \
+        "DID:IOTA:PRODUCT001" \
+        0x6 \
+    --gas $GAS_ID \
     --gas-budget 10000000
 
 
 Query Registry:
 
-iota client object 0xa2f929383f6782913df6566f9522295da7ea0e14f88c6c93c11804c1870adb23
-
+iota client object $REGISTY_ID
 
 
 iota client new-address ed25519
@@ -44,15 +44,17 @@ Keys saved as Bech32.
 │ recoveryPhrase │ winner arrive intact seminar design verify matter brain rich tilt guide hat │
 ╰────────────────┴─────────────────────────────────────────────────────────────────────────────╯
 
+export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9
+export OBJECT_ID=0xa233374ce7da4e85db270c20ab7d91967f66583505514f92b2c357613cc156f0
+
 Trasferimento oggetto:
 
-
 iota client call \
-    --package 0x29e91d159513f7ff95016b9ccb1bb5c89a9ae279ae6398dd999cc1904e7ce8ea \
-    --module TnT \
+    --package $PACKAGE_ID \
+    --module GS1 \
     --function transfer_gs1_object \
-    --args 0x203d5fd39c57996c7bfa5b4ebd8b39acbefabff8b92d869605b796c07c593636 0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9 \
-    --gas 0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23 \
+    --args $OBJECT_ID $DESTINATION_ADDR  \
+    --gas $GAS_ID \
     --gas-budget 10000000
 
 

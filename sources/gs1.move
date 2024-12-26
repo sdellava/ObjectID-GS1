@@ -6,8 +6,7 @@
 module 0x0::GS1 {
 
     use std::string::{String}; 
-    //use std::transfer;
-    //use std::tx_context;
+    use iota::clock::{Clock};
 
     /// Represents a GS1-compliant object with extended DID
     public struct GS1Object has key, store {
@@ -16,7 +15,8 @@ module 0x0::GS1 {
         serial_number: String, // Serial number
         description: String, // Description of the object
         lot_number: String, // Lot number
-        expiration_date: String, // Expiration date in ISO 8601 format
+        creation_date: u64, // Creation date in ISO 8601 format
+        expiration_date: String, // Expiration date text format
         producer_did: String, // DID of the producer
         product_did: String, // DID of the product
     }
@@ -52,10 +52,13 @@ public fun new_gs1_object(
     expiration_date: String,
     producer_did: String,
     product_did: String,
+    clock: &Clock,
     ctx: &mut TxContext,
 ) {
     // Increment the counter for created objects
     registry.objects_created = registry.objects_created + 1;
+
+    let creation_date = clock.timestamp_ms();
 
     // Create the new GS1 object
     let gs1_object = GS1Object {
@@ -64,6 +67,7 @@ public fun new_gs1_object(
         serial_number,
         description,
         lot_number,
+        creation_date,
         expiration_date,
         producer_did,
         product_did,
@@ -73,7 +77,6 @@ public fun new_gs1_object(
     transfer::transfer(gs1_object, tx_context::sender(ctx));
 
 }
-
 
     /// Transfers a GS1Object to another address
     /// - Validates ownership and moves the object to the target address
