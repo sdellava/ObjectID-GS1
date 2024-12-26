@@ -27,6 +27,13 @@ module 0x0::TnT {
         objects_created: u64, // Counter for created objects
     }
 
+    /// Structure to hold accumulated fees as an object
+    public struct FeeCollector has key, store {
+        id: UID,
+        accumulated_fees: u64, // Accumulated fees in base currency
+        fee_amount: u64, // Fee per operation
+    }
+
     /// Module initializer
     /// This function is executed when the module is published.
     fun init(ctx: &mut TxContext) {
@@ -35,8 +42,15 @@ module 0x0::TnT {
             objects_created: 0,
         };
 
+         let fee_collector = FeeCollector {
+            id: object::new(ctx),
+            accumulated_fees: 0,
+            fee_amount: 1, // Default fee set to 1000 base currency
+        };
+
         // Transfer the registry to the account of the module publisher
         transfer::transfer(registry, tx_context::sender(ctx));
+        transfer::transfer(fee_collector, tx_context::sender(ctx));
     }
 
     /// Creates a new GS1 object
@@ -82,6 +96,11 @@ public fun new_gs1_object(
     ) {
         // Transfer the GS1Object to the specified recipient
         transfer::transfer(gs1_object, recipient);
+    }
+
+    /// Charges a fee from the caller and adds it to the fee collector
+    public fun charge_fee(fee_collector: &mut FeeCollector) {
+        fee_collector.accumulated_fees = fee_collector.accumulated_fees + fee_collector.fee_amount;
     }
 
 }
