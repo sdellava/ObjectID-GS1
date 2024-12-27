@@ -1,9 +1,9 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-export PACKAGE_ID=0x17b0b4ce0ce71b2b0a5cf3cb3f0392c496f952241074953eda8c529e1f1d93d0
-export UPGRADE_CAP=0xda39072560241cce61c9338b6f55e95508efce943a1588457b30d97e9eccfdb9 
-export REGISTY_ID=0xea625b15acab636282e3f01ee3984853ec026211e6eb0fd1c7efeec5f7bbd8d6
+export PACKAGE_ID=0x6aea757b24b30efeb031607c8052e73f6f78bfe5361329964edf565bb7f712b7
+export UPGRADE_CAP=0x85e7631be8978592824ffe84bd94251b67620ae7f6a23a902087ca98f83db41a 
+export REGISTY_ID=0x6f3b0331b24494f7b04dd47b4079ea975d309f1b16a98148b46eaef16000763c
 export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
 export
@@ -26,6 +26,20 @@ iota client call \
         0x6 \
     --gas $GAS_ID \
     --gas-budget 10000000
+
+
+oppure
+
+
+iota client ptb --move-call "$PACKAGE_ID::GS1::new_gs1_object" @$REGISTY_ID \
+        '"123456789014"' \
+        '"SN123456791"' \
+        '"Sample Product Description"' \
+        '"LOT2025"' \
+        '"2025-12-20T10:01:59Z"' \
+        '"DID:IOTA:PRODUCER001"' \
+        '"DID:IOTA:PRODUCT001"' \
+        @0x6
 
 
 Query Registry:
