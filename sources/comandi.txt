@@ -1,12 +1,11 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-export PACKAGE_ID=0x6aea757b24b30efeb031607c8052e73f6f78bfe5361329964edf565bb7f712b7
-export UPGRADE_CAP=0x85e7631be8978592824ffe84bd94251b67620ae7f6a23a902087ca98f83db41a 
-export REGISTY_ID=0x6f3b0331b24494f7b04dd47b4079ea975d309f1b16a98148b46eaef16000763c
+export PACKAGE_ID=0x8a6ffe088cc4ef3e603b7a0029b0fdf43f89b376a339ccf2101b95263a69a682
+export UPGRADE_CAP=0xd9ece976775bca8e0e6086cd8a7f53eb3c9a3cf4bdfbf8ca7235d2a52c5dbe6f 
+export REGISTY_ID=0xd10ac4f28ad9d08e1294c0a8e73e1ef373e7916ab3b9b38025b437661e78d047
 export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
-export
 
 Creazione oggetto:
 
@@ -23,6 +22,7 @@ iota client call \
         "2025-12-20T10:01:59Z" \
         "DID:IOTA:PRODUCER001" \
         "DID:IOTA:PRODUCT001" \
+        '"DID:IOTA:RESELLER001"' \
         0x6 \
     --gas $GAS_ID \
     --gas-budget 10000000
@@ -39,8 +39,32 @@ iota client ptb --move-call "$PACKAGE_ID::GS1::new_gs1_object" @$REGISTY_ID \
         '"2025-12-20T10:01:59Z"' \
         '"DID:IOTA:PRODUCER001"' \
         '"DID:IOTA:PRODUCT001"' \
+        '"DID:IOTA:RESELLER001"' \
         @0x6
 
+
+cambio RESELLER
+
+export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9
+export OBJECT_ID=0xe40052a35e1d5b40f9c5e739879c4d3dcb40d4452dbd7a115d2b0bede7c64984
+
+
+iota client call \
+    --package $PACKAGE_ID \
+    --module GS1 \
+    --function update_gln \
+    --args \
+        $OBJECT_ID \
+        '"new RESELLER"' \
+    --gas $GAS_ID \
+    --gas-budget 10000000
+
+
+
+
+iota client ptb --move-call "$PACKAGE_ID::GS1::update_gln" $OBJECT_ID '"new RESELLER"'
+
+export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb8
 
 Query Registry:
 
@@ -58,8 +82,7 @@ Keys saved as Bech32.
 │ recoveryPhrase │ winner arrive intact seminar design verify matter brain rich tilt guide hat │
 ╰────────────────┴─────────────────────────────────────────────────────────────────────────────╯
 
-export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9
-export OBJECT_ID=0xa233374ce7da4e85db270c20ab7d91967f66583505514f92b2c357613cc156f0
+export OBJECT_ID=0x350716c727ece2b5fdbb6969aab431eec3d07d06615f35270b8e55824e733122
 
 Trasferimento oggetto:
 
