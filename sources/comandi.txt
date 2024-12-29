@@ -1,9 +1,9 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-export PACKAGE_ID=0x8a6ffe088cc4ef3e603b7a0029b0fdf43f89b376a339ccf2101b95263a69a682
-export UPGRADE_CAP=0xd9ece976775bca8e0e6086cd8a7f53eb3c9a3cf4bdfbf8ca7235d2a52c5dbe6f 
-export REGISTY_ID=0xd10ac4f28ad9d08e1294c0a8e73e1ef373e7916ab3b9b38025b437661e78d047
+export PACKAGE_ID=0x89d125124e7c5e26067bab5094ba0d66717198a9ca5260b67c9de6ce4d8f60a1
+export UPGRADE_CAP=0x5fcb698384735dff639f9c4232f03ee9c91ac112f60e715f787c6c67a16929e6 
+export REGISTY_ID=0x8bd275644e821969c0a93f6c157f842d561aee33706dd820876e9f313f5606ff
 export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
 
@@ -46,7 +46,7 @@ iota client ptb --move-call "$PACKAGE_ID::GS1::new_gs1_object" @$REGISTY_ID \
 cambio RESELLER
 
 export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9
-export OBJECT_ID=0xe40052a35e1d5b40f9c5e739879c4d3dcb40d4452dbd7a115d2b0bede7c64984
+export OBJECT_ID=0xdb5852b7ddbf9747fe0aa48cf7f402fde1f61f6623d2784d295fb7ce6e689f26
 
 
 iota client call \

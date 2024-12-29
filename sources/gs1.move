@@ -83,17 +83,20 @@ public fun new_gs1_object(
     };
 
     transfer::share_object(gs1_object);
- 
 }
 
 /// Transfers a GS1Object to another address
 /// - Validates ownership and moves the object to the target address
-public fun transfer_gs1_object(gs1_object: &mut GS1Object, new_owner_add: address, ctx: &TxContext) {
+public fun transfer_gs1_object(
+    gs1_object: &mut GS1Object,
+    new_owner_add: address,
+    ctx: &TxContext,
+) {
     // Update the GS1Object to the specified recipient
     let caller = tx_context::sender(ctx);
     let creator_add = gs1_object.creator_add;
-    let current_owner_add = gs1_object.owner_add; 
-    assert!( caller == current_owner_add || caller == creator_add, 1);
+    let current_owner_add = gs1_object.owner_add;
+    assert!(caller == current_owner_add || caller == creator_add, 1);
     gs1_object.owner_add = new_owner_add;
 }
 
@@ -103,4 +106,16 @@ public fun update_gln(gs1_object: &mut GS1Object, new_gln: String, ctx: &TxConte
     let caller = tx_context::sender(ctx);
     assert!(caller == gs1_object.creator_add, 1);
     gs1_object.gln = new_gln;
+}
+
+/// Deletes a GS1Object
+/// - Can only be called by the creator or the current owner
+public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
+    let caller = tx_context::sender(ctx);
+
+    assert!(caller == gs1_object.creator_add, 1);
+    assert!(gs1_object.owner_add == @0x0, 2);
+
+    let GS1Object { id, .. } = gs1_object;
+    object::delete(id);
 }
