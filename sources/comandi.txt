@@ -46,6 +46,9 @@ iota client ptb --move-call "$PACKAGE_ID::GS1::new_gs1_object" @$REGISTY_ID \
 cambio RESELLER
 
 export DESTINATION_ADDR=0x28a46925757074b8a0cb8f1fcee6d71de73069d74b2c48a49d63c0552539fcb9
+
+export DESTINATION_ADDR=0xd20465856cd968ca26774c35333de2407ceae0e9fa86d65b90e4b48b626270b4
+
 export OBJECT_ID=0x908d607e25bd62a05f6d98bb2c6dad2391d4486669d9d91ed701e8ea6e7231fb
 
 iota client call \
