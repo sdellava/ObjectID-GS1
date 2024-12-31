@@ -19,27 +19,32 @@ public struct GS1Object has key, store {
     expiration_date: String, // Expiration date text format
     producer_did: String, // DID of the producer
     product_did: String, // DID of the product
-    creator_add: address,
-    owner_add: address,
+    creator_add: address, // address of the object creator
+    producer_dns: String, // domain name where the dApp look for onj-type TXT entry to validate the object type
+    owner_add: address,  // address of the current owner. Set to 0x0 if the product is never been sold.
     gln: String,
 }
 
 /// Registry to track the number of created objects
+/*
 public struct Registry has key {
     id: UID,
-    objects_created: u64, // Counter for created objects
+    objects_created: u64, 
 }
+*/
 
 /// Module initializer
 /// This function is executed when the module is published.
 fun init(ctx: &mut TxContext) {
+    /*
     let registry = Registry {
         id: object::new(ctx),
         objects_created: 0,
     };
+    */
 
     // Transfer the registry to the account of the module publisher
-    transfer::transfer(registry, tx_context::sender(ctx));
+    //transfer::transfer(registry, tx_context::sender(ctx));
 }
 
 /// Creates a new GS1 object
@@ -47,20 +52,21 @@ fun init(ctx: &mut TxContext) {
 /// - Returns a new GS1Object to the caller
 
 public fun new_gs1_object(
-    registry: &mut Registry,
+    //registry: &mut Registry,
     gtin: String,
     serial_number: String,
     description: String,
     lot_number: String,
     expiration_date: String,
     producer_did: String,
+    producer_dns: String,
     product_did: String,
     gln: String,
     clock: &Clock,
     ctx: &mut TxContext,
 ) {
     // Increment the counter for created objects
-    registry.objects_created = registry.objects_created + 1;
+    //registry.objects_created = registry.objects_created + 1;
 
     let creation_date = clock.timestamp_ms();
     let creator_add = tx_context::sender(ctx);
@@ -77,6 +83,7 @@ public fun new_gs1_object(
         expiration_date,
         producer_did,
         product_did,
+        producer_dns,
         creator_add,
         owner_add,
         gln,

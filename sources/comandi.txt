@@ -1,9 +1,8 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-export PACKAGE_ID=0x89d125124e7c5e26067bab5094ba0d66717198a9ca5260b67c9de6ce4d8f60a1
-export UPGRADE_CAP=0x5fcb698384735dff639f9c4232f03ee9c91ac112f60e715f787c6c67a16929e6 
-export REGISTY_ID=0x8bd275644e821969c0a93f6c157f842d561aee33706dd820876e9f313f5606ff
+export PACKAGE_ID=0xeb832b26b26fab1b381c41a179d8b7e8285a9349aecd2b67763543b29554f95a
+export UPGRADE_CAP=0x4fd307402111ca9d4471ef46e8dc015f654e4d1fccb4e1d21945d621a68708db 
 export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
 
@@ -14,13 +13,13 @@ iota client call \
     --module GS1 \
     --function new_gs1_object \
     --args \
-        $REGISTY_ID \
         "123456789014" \
         "SN123456791" \
         "Sample Product Description" \
         "LOT2025" \
         "2025-12-20T10:01:59Z" \
         "DID:IOTA:PRODUCER001" \
+        "nxc.technology" \
         "DID:IOTA:PRODUCT001" \
         '"DID:IOTA:RESELLER001"' \
         0x6 \
