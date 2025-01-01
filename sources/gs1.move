@@ -16,13 +16,13 @@ public struct GS1Object has key, store {
     description: String, // Description of the object
     lot_number: String, // Lot number
     creation_date: u64, // Creation date in ISO 8601 format
-    expiration_date: String, // Expiration date text format
-    producer_did: String, // DID of the producer
-    product_did: String, // DID of the product
+    expiration_date: String, // Expiration date in ISO 8601 format
+    product_page: String, // web page of the product
     creator_add: address, // address of the object creator
-    producer_dns: String, // domain name where the dApp look for onj-type TXT entry to validate the object type
-    owner_add: address,  // address of the current owner. Set to 0x0 if the product is never been sold.
+    producer_dn: String, // domain name where the dApp look for onj-type TXT entry to validate the object type
+    owner_add: address, // address of the current owner. Set to 0x0 if the product is never been sold.
     gln: String,
+    geo_location: String, // geographic coordinate where the physical product is
 }
 
 /// Registry to track the number of created objects
@@ -35,17 +35,7 @@ public struct Registry has key {
 
 /// Module initializer
 /// This function is executed when the module is published.
-fun init(ctx: &mut TxContext) {
-    /*
-    let registry = Registry {
-        id: object::new(ctx),
-        objects_created: 0,
-    };
-    */
-
-    // Transfer the registry to the account of the module publisher
-    //transfer::transfer(registry, tx_context::sender(ctx));
-}
+//fun init(ctx: &mut TxContext) {}
 
 /// Creates a new GS1 object
 /// - Updates the registry's object counter
@@ -58,10 +48,10 @@ public fun new_gs1_object(
     description: String,
     lot_number: String,
     expiration_date: String,
-    producer_did: String,
-    producer_dns: String,
-    product_did: String,
+    producer_dn: String,
+    product_page: String,
     gln: String,
+    geo_location: String,
     clock: &Clock,
     ctx: &mut TxContext,
 ) {
@@ -81,19 +71,20 @@ public fun new_gs1_object(
         lot_number,
         creation_date,
         expiration_date,
-        producer_did,
-        producer_dns,
-        product_did,
+        producer_dn,
+        product_page,
         creator_add,
         owner_add,
         gln,
+        geo_location,
     };
 
     transfer::share_object(gs1_object);
 }
 
-/// Transfers a GS1Object to another address
-/// - Validates ownership and moves the object to the target address
+/// Transfers a GS1Object to another onwer
+/// Validates ownership and moves the object to the target address
+/// Can only be called by the creator if no owner or the current owner
 public fun transfer_gs1_object(
     gs1_object: &mut GS1Object,
     new_owner_add: address,
@@ -101,27 +92,43 @@ public fun transfer_gs1_object(
 ) {
     // Update the GS1Object to the specified recipient
     let caller = tx_context::sender(ctx);
-    let creator_add = gs1_object.creator_add;
-    let current_owner_add = gs1_object.owner_add;
-    assert!(caller == current_owner_add || caller == creator_add, 1);
+    assert!(
+        (caller == gs1_object.creator_add && gs1_object.owner_add == @0x0) || (caller == gs1_object.owner_add),
+        1,
+    );
     gs1_object.owner_add = new_owner_add;
 }
 
 /// Updates the GLN field
-/// - Can only be called by the creator of the smart contract
+/// Can only be called by the creator
 public fun update_gln(gs1_object: &mut GS1Object, new_gln: String, ctx: &TxContext) {
     let caller = tx_context::sender(ctx);
     assert!(caller == gs1_object.creator_add, 1);
     gs1_object.gln = new_gln;
 }
 
+/// Updates the geolocation field
+/// Can only be called by the creator if no owner or the current owner
+public fun update_geo_location(gs1_object: &mut GS1Object, new_location: String, ctx: &TxContext) {
+    let caller = tx_context::sender(ctx);
+
+    assert!(
+        (caller == gs1_object.creator_add && gs1_object.owner_add == @0x0) || (caller == gs1_object.owner_add),
+        1,
+    );
+
+    gs1_object.geo_location = new_location;
+}
+
 /// Deletes a GS1Object
-/// - Can only be called by the creator or the current owner
+/// Can only be called by the creator if no owner or the current owner
 public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
     let caller = tx_context::sender(ctx);
 
-    assert!(caller == gs1_object.creator_add, 1);
-    assert!(gs1_object.owner_add == @0x0, 2);
+    assert!(
+        (caller == gs1_object.creator_add && gs1_object.owner_add == @0x0) || (caller == gs1_object.owner_add),
+        1,
+    );
 
     let GS1Object { id, .. } = gs1_object;
     object::delete(id);

@@ -1,8 +1,8 @@
 build: iota move build
 publish: iota client publish --dry-run
 
-export PACKAGE_ID=0xeb832b26b26fab1b381c41a179d8b7e8285a9349aecd2b67763543b29554f95a
-export UPGRADE_CAP=0x4fd307402111ca9d4471ef46e8dc015f654e4d1fccb4e1d21945d621a68708db 
+export PACKAGE_ID=0x69ab477ec0a23e6e6e8bda5c29402db51eff7e5ac417c860c9bbe8c29e6b574c
+export UPGRADE_CAP=0x6906e706685c79835d2a98cbe0a24dd29a279fd83c51235c4efc15d7decff185 
 export GAS_ID=0x68f60d453de39c28d6b2a2cadb1dcc384d1c1b8b3dd41f8b0a4d199fefbdcf23
 
 
@@ -13,15 +13,15 @@ iota client call \
     --module GS1 \
     --function new_gs1_object \
     --args \
-        "123456789014" \
-        "SN123456791" \
-        "Sample Product Description" \
+        "8000320010026" \
+        "-" \
+        "Pomodori pelati" \
         "LOT2025" \
-        "2025-12-20T10:01:59Z" \
-        "DID:IOTA:PRODUCER001" \
+        "1767261230" \
         "nxc.technology" \
-        "DID:IOTA:PRODUCT001" \
-        '"DID:IOTA:RESELLER001"' \
+        "https://cirio.it/prodotti/pomodori-pelati/" \
+        "Drogheria Centrale, Arcore" \
+        "J8GG+W3" \
         0x6 \
     --gas $GAS_ID \
     --gas-budget 10000000
