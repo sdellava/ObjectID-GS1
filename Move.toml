@@ -1,5 +1,6 @@
 [package]
 name = "trace"
+version = "0.0.1"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
@@ -19,7 +20,8 @@ Iota = { git = "https://github.com/iotaledger/iota.git", subdir = "crates/iota-f
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-trace = "0x6aea757b24b30efeb031607c8052e73f6f78bfe5361329964edf565bb7f712b7"
+#trace = "0x69ab477ec0a23e6e6e8bda5c29402db51eff7e5ac417c860c9bbe8c29e6b574c"
+trace = "0x0"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.

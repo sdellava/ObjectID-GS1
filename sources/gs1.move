@@ -11,7 +11,7 @@ use std::string::String;
 /// Represents a GS1-compliant object with extended DID
 public struct GS1Object has key, store {
     id: UID, // Unique identifier for the object
-    gtin: String, // Global Trade Item Number
+    epc: String, // Global Trade Item Number
     serial_number: String, // Serial number
     description: String, // Description of the object
     lot_number: String, // Lot number
@@ -21,17 +21,23 @@ public struct GS1Object has key, store {
     creator_add: address, // address of the object creator
     producer_dn: String, // domain name where the dApp look for onj-type TXT entry to validate the object type
     owner_add: address, // address of the current owner. Set to 0x0 if the product is never been sold.
+    last_event_id: address, // UID of the last GS1 Event
     gln: String,
     geo_location: String, // geographic coordinate where the physical product is
 }
 
-/// Registry to track the number of created objects
-/*
-public struct Registry has key {
-    id: UID,
-    objects_created: u64, 
+// Define the GS1 Event structure
+public struct Gs1Event has key {
+    id: UID, // Unique identifier for the event
+    epc: String, // Electronic Product Code (EPC) associated with the event
+    event_type: String, // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+    biz_step: String, // Business step (e.g., commissioning, shipping, etc.)
+    timestamp: u64, // Unix timestamp for when the event occurred
+    read_point: String, // Location where the event was recorded
+    biz_location: String, // Business location associated with the event
+    previous_event_id: address, // Reference to the previous event ID
+    creator_add: address,
 }
-*/
 
 /// Module initializer
 /// This function is executed when the module is published.
@@ -42,14 +48,14 @@ public struct Registry has key {
 /// - Returns a new GS1Object to the caller
 
 public fun new_gs1_object(
-    //registry: &mut Registry,
-    gtin: String,
+    epc: String,
     serial_number: String,
     description: String,
     lot_number: String,
     expiration_date: String,
     producer_dn: String,
     product_page: String,
+    last_event_id: address,
     gln: String,
     geo_location: String,
     clock: &Clock,
@@ -65,7 +71,7 @@ public fun new_gs1_object(
     // Create the new GS1 object
     let gs1_object = GS1Object {
         id: object::new(ctx),
-        gtin,
+        epc,
         serial_number,
         description,
         lot_number,
@@ -75,6 +81,7 @@ public fun new_gs1_object(
         product_page,
         creator_add,
         owner_add,
+        last_event_id,
         gln,
         geo_location,
     };
@@ -131,5 +138,47 @@ public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
     );
 
     let GS1Object { id, .. } = gs1_object;
+    object::delete(id);
+}
+
+public fun new_gs1_event(
+    epc: String, // Electronic Product Code (EPC) associated with the event
+    event_type: String, // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+    biz_step: String, // Business step (e.g., commissioning, shipping, etc.)
+    read_point: String, // Location where the event was recorded
+    biz_location: String, // Business location associated with the event
+    previous_event_id: address, // Reference to the previous event ID
+    clock: &Clock,
+    ctx: &mut TxContext,
+) {
+    // Increment the counter for created objects
+
+    let timestamp = clock.timestamp_ms();
+    let creator_add = tx_context::sender(ctx);
+
+    // Create the new GS1 object
+    let gs1_event = Gs1Event {
+        id: object::new(ctx),
+        epc, // Electronic Product Code (EPC) associated with the event
+        event_type, // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+        biz_step, // Business step (e.g., commissioning, shipping, etc.)
+        timestamp, // Unix timestamp for when the event occurred
+        read_point, // Location where the event was recorded
+        biz_location, // Business location associated with the event
+        previous_event_id, // Reference to the previous event ID
+        creator_add,
+    };
+
+    transfer::share_object(gs1_event);
+}
+
+/// Deletes a GS1Event
+/// Can only be called by the creator
+public fun delete_gs1_event(gs1_object: GS1Event, ctx: &TxContext) {
+    let caller = tx_context::sender(ctx);
+
+    assert!(caller == gs1_event.creator_add, 1);
+
+    let GS1Event { id, .. } = gs1_event;
     object::delete(id);
 }
