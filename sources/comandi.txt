@@ -22,7 +22,7 @@ iota client call \
         "nxc.technology" \
         "https://cirio.it/prodotti/pomodori-pelati/" \
         "Drogheria Centrale, Arcore" \
-        "J8GG+W3" \
+        "8FQFJ8GG+W3" \
         0x6 \
     --gas $GAS_ID \
     --gas-budget 10000000
