@@ -1,7 +1,8 @@
 [package]
 name = "GS1"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
+published-at = "0xdfe8ad08acc1851c569e54960301e71dc23676aacc4ab58625533e2e66ff2229"
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
