@@ -2,7 +2,7 @@
 name = "GS1"
 version = "0.0.4"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
-published-at = "0xdfe8ad08acc1851c569e54960301e71dc23676aacc4ab58625533e2e66ff2229"
+published-at = "0x8c1b61a3035d099089d8d947284b5de52e332359bc3d5d28a239f7d325e5e46a"
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 

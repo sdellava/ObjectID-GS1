@@ -7,6 +7,8 @@ module 0x0::GS1;
 
 use iota::clock::Clock;
 use std::string::String;
+use iota::transfer::{Receiving};
+
 
 /// Represents a GS1-compliant object 
 public struct GS1Object has key, store {
@@ -23,7 +25,6 @@ public struct GS1Object has key, store {
     owner_add: address, // address of the current owner. Set to 0x0 if the product is never been sold.
     gln: String,
     geo_location: String, // geographic coordinate where the physical product is
-    previous_event: address
 }
 
 /// Module initializer
@@ -50,7 +51,6 @@ public fun new_gs1_object(
     let creation_date = clock.timestamp_ms();
     let creator_add = tx_context::sender(ctx);
     let owner_add: address = @0x0;
-    let previous_event: address = @0x0;
 
     // Create the new GS1 object
     let gs1_object = GS1Object {
@@ -67,7 +67,6 @@ public fun new_gs1_object(
         owner_add,
         gln,
         geo_location,
-        previous_event
     };
 
     transfer::share_object(gs1_object);
@@ -127,16 +126,18 @@ public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
 
 
 // Define the GS1 Event structure
-public struct GS1Event has key {
+public struct GS1Event has key, store {
     id: UID, // Unique identifier for the event
     epc: String, // Electronic Product Code (EPC) associated with the event
     event_type: String, // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+    action: String, // Action associated with the event (e.g., ADD, OBSERVE, DELETE)
     biz_step: String, // Business step (e.g., commissioning, shipping, etc.)
+    disposition: String, // Disposition of the product (e.g., active, sold, destroyed)
     timestamp: u64, // Unix timestamp for when the event occurred
     read_point: String, // Location where the event was recorded
     biz_location: String, // Business location associated with the event
-    creator_add: address,
-    notes: String
+    creator_add: address, // Address of the event creator
+    notes: String // Optional notes or additional information about the event
 }
 
 
@@ -146,7 +147,9 @@ public fun new_gs1_event(
     gs1_object: address, // The UID of the shared GS1Object to register the event on
     epc: String,                   // Electronic Product Code (EPC) associated with the event
     event_type: String,            // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+    action: String,
     biz_step: String,              // Business step (e.g., commissioning, shipping, etc.)
+    disposition: String,
     read_point: String,            // Location where the event was recorded
     biz_location: String,          // Business location associated with the event
     notes: String,
@@ -162,7 +165,9 @@ public fun new_gs1_event(
         id,
         epc,               // Electronic Product Code (EPC) associated with the event
         event_type,        // Type of the event (e.g., ObjectEvent, AggregationEvent, etc.)
+        action, 
         biz_step,          // Business step (e.g., commissioning, shipping, etc.)
+        disposition,
         timestamp,         // Unix timestamp for when the event occurred
         read_point,        // Location where the event was recorded
         biz_location,      // Business location associated with the event
@@ -170,8 +175,23 @@ public fun new_gs1_event(
         notes
     };
 
-    //transfer::transfer(gs1_event, creator_add);
+    transfer::public_transfer(gs1_event, gs1_object);
+    
+}
 
-    transfer::transfer(gs1_event, gs1_object);
+
+/// Deletes a GS1Event
+/// Can only be called by the owner
+
+public fun delete_gs1_event(gs1_object: &mut GS1Object, gs1_event: Receiving<GS1Event>, ctx: &TxContext) {
+
+    let caller = tx_context::sender(ctx);
+
+    assert!(caller == gs1_object.creator_add, 1);
+
+    let obj: GS1Event = transfer::public_receive(&mut gs1_object.id, gs1_event);
+
+    let GS1Event { id, .. } = obj;
+    object::delete(id);
 
 }
