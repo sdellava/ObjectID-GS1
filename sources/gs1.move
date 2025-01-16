@@ -110,6 +110,7 @@ public fun update_geo_location(gs1_object: &mut GS1Object, new_location: String,
     gs1_object.geo_location = new_location;
 }
 
+
 /// Deletes a GS1Object
 /// Can only be called by the creator if no owner or the current owner
 public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
@@ -123,7 +124,6 @@ public fun delete_gs1_object(gs1_object: GS1Object, ctx: &TxContext) {
     let GS1Object { id, .. } = gs1_object;
     object::delete(id);
 }
-
 
 // Define the GS1 Event structure
 public struct GS1Event has key, store {
@@ -181,7 +181,7 @@ public fun new_gs1_event(
 
 
 /// Deletes a GS1Event
-/// Can only be called by the owner
+/// Can only be called by the object creator
 
 public fun delete_gs1_event(gs1_object: &mut GS1Object, gs1_event: Receiving<GS1Event>, ctx: &TxContext) {
 
